@@ -6,27 +6,30 @@ handlebars = require('express3-handlebars').create({ defaultLayout:'main' })
 app.engine 'handlebars', handlebars.engine
 app.set 'views engine', 'handlebars'
 
+app.use(express.static(__dirname + '/public'))
+
 app.set 'port', process.env.PROT || 3000
 
 
+
 app.get '/', (req, res) ->
-  res.type 'text/plain'
-  res.send 'Meadowlark Travel'
+  res.render 'home'
 
 app.get '/about', (req, res) ->
-  res.type 'text/plain'
-  res.send 'About Meadowlark Travel'
+  fortunes = [
+    "Conquer your fears or they will conquer you.",
+    "Rivers need springs.",
+    "Do not fear what you don't know.",
+    "You will have a pleasant surprise.", "Whenever possible, keep it simple.",
+  ]
+  res.render 'about', {fortune:fortunes}
 
 app.use (req, res) ->
-  res.type 'text/plain'
-  res.status 404
-  res.send '404 - Not Found'
+  res.render '404'
 
 app.use (err, req, res, next) ->
   console.error err.stack
-  res.type 'text/plain'
-  res.status 500
-  res.send '500 - Server Error'
+  res.render '500'
 
 app.listen app.get('port'), () ->
   console.log 'Express started on http://localhost:' +

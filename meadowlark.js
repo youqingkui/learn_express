@@ -14,29 +14,29 @@
 
   app.set('views engine', 'handlebars');
 
+  app.use(express["static"](__dirname + '/public'));
+
   app.set('port', process.env.PROT || 3000);
 
   app.get('/', function(req, res) {
-    res.type('text/plain');
-    return res.send('Meadowlark Travel');
+    return res.render('home');
   });
 
   app.get('/about', function(req, res) {
-    res.type('text/plain');
-    return res.send('About Meadowlark Travel');
+    var fortunes;
+    fortunes = ["Conquer your fears or they will conquer you.", "Rivers need springs.", "Do not fear what you don't know.", "You will have a pleasant surprise.", "Whenever possible, keep it simple."];
+    return res.render('about', {
+      fortune: fortunes
+    });
   });
 
   app.use(function(req, res) {
-    res.type('text/plain');
-    res.status(404);
-    return res.send('404 - Not Found');
+    return res.render('404');
   });
 
   app.use(function(err, req, res, next) {
     console.error(err.stack);
-    res.type('text/plain');
-    res.status(500);
-    return res.send('500 - Server Error');
+    return res.render('500');
   });
 
   app.listen(app.get('port'), function() {
